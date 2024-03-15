@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ma page web</title>
+  <link rel="icon" href="favicon.ico">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <style>
+    td{
+      text-align:center;
+      font-weight:bold 
+      !important;
+      }
+  </style>
+<script>
+var leCodeSecret = "";
+var leNumeroCompte = "";
+var table;
+var clavier = new Array(8);
+clavier[0] = new Array(3);
+clavier[1] = new Array(3);
+clavier[2] = new Array(3);
+clavier[3] = new Array(3);
+clavier[4] = new Array(3);
+clavier[5] = new Array(3);
+clavier[6] = new Array(3);
+clavier[7] = new Array(3);
+
+function showClavier() {
+  $("#clavier").html(table);
+}
+
+function hideClavier() {
+  $("#clavier").html("");
+}
+
+function Construction() {
+  GenerationAleatoire();
+  GenererClavier();
+}
+
+function GenerationAleatoire() {
+  for (var i = 0; i < 8; i++) {
+    for (var j = 0; j < 3; j++) {
+      clavier[i][j] = -1;
+    }
+  }
+
+  for (var chiffre = 0; chiffre < 10; chiffre++) {
+    do {
+      ausuivant = false;
+      var cellule = Math.floor(Math.random() * 24);
+      var ligne = Math.floor(cellule / 3);
+      var colonne = cellule % 3;
+      if (clavier[ligne][colonne] == -1) {
+        clavier[ligne][colonne] = chiffre;
+        ausuivant = true;
+      }
+    } while (ausuivant == false);
+  }
+}
+
+function GenererClavier() {
+  table = "<table class='table .table-striped'>";
+  for (var i = 0; i < 8; i++) {
+    table += "<tr>";
+    for (var j = 0; j < 3; j++) {
+      val = clavier[i][j];
+      if (val == -1)
+        table += "<td >__</td>";
+      else
+        table += "<td class='danger'>" + val + "</td>";
+    }
+    table += "</tr>";
+  }
+  table += "</table>";
+}
+
+$(document).ready(function () {
+  Construction();
+  $("#soumettre").hide();
+
+  $("#annuler").click(function () {});
+
+  $("#Compte").on("input", function () {
+    leNumeroCompte = $(this).val();
+    if (!$.isNumeric(leNumeroCompte) || (leNumeroCompte.length > 13)) {
+      leNumeroCompte = leNumeroCompte.slice(0, -1);
+      $("#Compte").val(leNumeroCompte);
+    } else if (leNumeroCompte.length == 13)
+      showClavier();
+  });
+});
+</script>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="jumbotron">
+        <img src="./../images/CA.png"></img>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-group">
+        <span class="input-group-addon">Saisissez votre numéro de compte :</span>
+        <input id="Compte"type="text"class="form-control"placeholder="Numéro de compte...">
+      </div>
+    </div><br>
+    <div class="row">
+      <div class="col-xs-4 cos-xs-offset-1">
+        <div class="row">
+          <h2>Cliquez dans la grille <br>pour composer votre<br>CODE PERSONNEL :</h2>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <div id="clavier">
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="row">
+          <div class="form-group">
+            <label for="pwd">Votre code secret (6 chiffres) :</label>
+            <input type="password"id="Code"readonly class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="btn-group">
+            <button type="button"id="corriger"class="btn btn-warning">Corriger</button>
+            <button type="button"id="annuler"class="btn btn-info">Annuler</button>
+            <button type="button"id="soumettre"class="btn btn-success">Soumettre</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="jumbotron">
+        <img src="./../images/PubCA.PNG"></img>
+      </div>
+    </div>
+  </div><!--fin de container  -->
+</body>
+</html>
