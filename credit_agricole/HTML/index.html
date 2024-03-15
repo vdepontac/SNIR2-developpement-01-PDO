@@ -12,133 +12,141 @@
   <style>
     td{
       text-align:center;
-      font-weight:bold 
-      !important;
-      }
+      font-weight:bold !important; /*Définit le style de police en gras pour les cellules du tableau*/
+    }
   </style>
+</head>
 <script>
-var leCodeSecret = "";
-var leNumeroCompte = "";
-var table;
-var clavier = new Array(8);
-clavier[0] = new Array(3);
-clavier[1] = new Array(3);
-clavier[2] = new Array(3);
-clavier[3] = new Array(3);
-clavier[4] = new Array(3);
-clavier[5] = new Array(3);
-clavier[6] = new Array(3);
-clavier[7] = new Array(3);
-
-function showClavier() {
-  $("#clavier").html(table);
-}
-
-function hideClavier() {
-  $("#clavier").html("");
-}
-
-function Construction() {
-  GenerationAleatoire();
-  GenererClavier();
-}
-
-function GenerationAleatoire() {
-  for (var i = 0; i < 8; i++) {
-    for (var j = 0; j < 3; j++) {
-      clavier[i][j] = -1;
-    }
+  // Déclaration des variables
+  var leCodeSecret = ""; // Variable pour stocker le code secret
+  var leNumeroCompte = ""; // Variable pour stocker le numéro de compte
+  var table; // Variable pour stocker le tableau HTML du clavier
+  var clavier = new Array(8); // Tableau pour stocker les chiffres du clavier
+  clavier[0] = new Array(3);
+  clavier[1] = new Array(3);
+  clavier[2] = new Array(3);
+  clavier[3] = new Array(3);
+  clavier[4] = new Array(3);
+  clavier[5] = new Array(3);
+  clavier[6] = new Array(3);
+  clavier[7] = new Array(3);
+  
+  // Fonction pour afficher le clavier
+  function showClavier() {
+    $("#clavier").html(table); // Affiche le tableau HTML du clavier dans l'élément avec l'ID "clavier"
   }
-
-  for (var chiffre = 0; chiffre < 10; chiffre++) {
-    do {
-      ausuivant = false;
-      var cellule = Math.floor(Math.random() * 24);
-      var ligne = Math.floor(cellule / 3);
-      var colonne = cellule % 3;
-      if (clavier[ligne][colonne] == -1) {
-        clavier[ligne][colonne] = chiffre;
-        ausuivant = true;
+  
+  // Fonction pour masquer le clavier
+  function hideClavier() {
+    $("#clavier").html(""); // Masque le clavier en vidant le contenu de l'élément avec l'ID "clavier"
+  }
+  
+  // Fonction de construction
+  function Construction() {
+    GenerationAleatoire(); // Génère les chiffres aléatoires du clavier
+    GenererClavier(); // Génère le tableau HTML du clavier
+  }
+  
+  // Fonction pour générer des nombres aléatoires dans le clavier
+  function GenerationAleatoire() {
+    for (var i = 0; i < 8; i++) {
+      for (var j = 0; j < 3; j++) {
+        clavier[i][j] = -1; // Initialise toutes les cellules du clavier à -1
       }
-    } while (ausuivant == false);
-  }
-}
-
-function GenererClavier() {
-  table = "<table class='table .table-striped'>";
-  for (var i = 0; i < 8; i++) {
-    table += "<tr>";
-    for (var j = 0; j < 3; j++) {
-      val = clavier[i][j];
-      if (val == -1)
-        table += "<td >__</td>";
-      else
-        table += "<td class='danger'>" + val + "</td>";
     }
-    table += "</tr>";
+  
+    for (var chiffre = 0; chiffre < 10; chiffre++) {
+      do {
+        ausuivant = false;
+        var cellule = Math.floor(Math.random() * 24); // Génère un nombre aléatoire entre 0 et un nombre aléatoire entre 0 et 24 pour sélectionner une cellule du clavier
+        var ligne = Math.floor(cellule / 3); // Calcule le numéro de ligne de la cellule
+        var colonne = cellule % 3; // Calcule le numéro de colonne de la cellule
+        if (clavier[ligne][colonne] == -1) {
+          clavier[ligne][colonne] = chiffre; // Affecte le chiffre à la cellule du clavier
+          ausuivant = true;
+        }
+      } while (ausuivant == false);
+    }
   }
-  table += "</table>";
-}
-
-$(document).ready(function () {
-  Construction();
-  $("#soumettre").hide();
-
-  $("#annuler").click(function () {});
-
-  $("#Compte").on("input", function () {
-    leNumeroCompte = $(this).val();
-    if (!$.isNumeric(leNumeroCompte) || (leNumeroCompte.length > 13)) {
-      leNumeroCompte = leNumeroCompte.slice(0, -1);
-      $("#Compte").val(leNumeroCompte);
-    } else if (leNumeroCompte.length == 13)
-      showClavier();
+  
+  // Fonction pour générer le clavier HTML
+  function GenererClavier() {
+    table = "<table class='table .table-striped'>"; // Début du tableau HTML
+    for (var i = 0; i < 8; i++) {
+      table += "<tr>"; // Début d'une ligne du tableau
+      for (var j = 0; j < 3; j++) {
+        val = clavier[i][j];
+        if (val == -1)
+          table += "<td >__</td>"; // Cellule vide si la valeur est -1
+        else
+          table += "<td class='danger'>" + val + "</td>"; // Cellule avec le chiffre
+      }
+      table += "</tr>"; // Fin de la ligne du tableau
+    }
+    table += "</table>"; // Fin du tableau HTML
+  }
+  
+  $(document).ready(function () {
+    Construction(); // Appelle la fonction de construction pour initialiser le clavier
+    $("#soumettre").hide(); // Masque le bouton "Soumettre"
+  
+    $("#annuler").click(function () {
+      // Action à effectuer lors du clic sur le bouton "Annuler"
+    });
+  
+    $("#Compte").on("input", function () {
+      leNumeroCompte = $(this).val(); // Récupère la valeur du champ de saisie du numéro de compte
+      if (!$.isNumeric(leNumeroCompte) || (leNumeroCompte.length > 13)) {
+        leNumeroCompte = leNumeroCompte.slice(0, -1); // Supprime le dernier caractère s'il n'est pas numérique ou si la longueur dépasse 13
+        $("#Compte").val(leNumeroCompte); // Met à jour la valeur du champ de saisie du numéro de compte
+      } else if (leNumeroCompte.length == 13)
+        showClavier(); // Affiche le clavier si la longueur du numéro de compte est égale à 13
+    });
   });
-});
 </script>
 </head>
 <body>
   <div class="container">
     <div class="row">
       <div class="jumbotron">
-        <img src="./../images/CA.png"></img>
+        <img src="./../images/CA.png"></img> <!-- Affiche l'image du logo -->
       </div>
     </div>
     <div class="row">
       <div class="input-group">
-        <span class="input-group-addon">Saisissez votre numéro de compte :</span>
-        <input id="Compte"type="text"class="form-control"placeholder="Numéro de compte...">
+        <span class="input-group-addon">Saisissez votre numéro de compte :</span> <!-- Étiquette pour le champ de saisie du numéro de compte -->
+        <input id="Compte" type="text" class="form-control" placeholder="Numéro de compte..."> <!-- Champ de saisie du numéro de compte -->
       </div>
     </div><br>
     <div class="row">
       <div class="col-xs-4 cos-xs-offset-1">
         <div class="row">
-          <h2>Cliquez dans la grille <br>pour composer votre<br>CODE PERSONNEL :</h2>
+          <h2>Cliquez dans la grille <br>pour composer votre<br>CODE PERSONNEL :</h2> <!-- Titre pour la grille de composition du code personnel -->
         </div>
       </div>
       <div class="col-xs-4">
         <div id="clavier">
-        </div>
+        </div> <!-- Élément pour afficher le clavier -->
       </div>
       <div class="col-xs-3">
         <div class="row">
           <div class="form-group">
-            <label for="pwd">Votre code secret (6 chiffres) :</label>
-            <input type="password"id="Code"readonly class="form-control">
+            <label for="pwd">Votre code secret (6 chiffres) :</label> <!-- Étiquette pour le champ de saisie du code secret -->
+            <input type="password" id="Code" readonly class="form-control"> <!-- Champ de saisie du code secret -->
           </div>
         </div>
         <div class="row">
           <div class="btn-group">
-            <button type="button"id="corriger"class="btn btn-warning">Corriger</button>
-            <button type="button"id="annuler"class="btn btn-info">Annuler</button>
-            <button type="button"id="soumettre"class="btn btn-success">Soumettre</button>
+            <button type="button" id="corriger" class="btn btn-warning">Corriger</button> <!-- Bouton pour corriger le code -->
+            <button type="button" id="annuler" class="btn btn-info">Annuler</button> <!-- Bouton pour annuler la saisie du code -->
+            <button type="button" id="soumettre" class="btn btn-success">Soumettre</button> <!-- Bouton pour soumettre le code -->
           </div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="jumbotron">
-        <img src="./../images/PubCA.PNG"></img>
+        <img src="./../images/PubCA.PNG"></img> <!-- Affiche l'image publicitaire -->
       </div>
     </div>
   </div><!--fin de container  -->
